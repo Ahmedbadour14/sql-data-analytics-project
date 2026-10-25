@@ -296,22 +296,6 @@ I gained practical experience in:
 - Segmenting customers and products.
 - Building reusable SQL reports for business analysis.
 
----
-
-# 📚 Project Source & Credits
-
-This project was completed as part of my SQL learning journey following the **Data With Baraa – SQL Data Analytics Project**.
-
-The original dataset, project roadmap, and learning materials were provided by **Baraa Khatib Salkini (Data With Baraa)**.
-
-I implemented the project independently for learning and portfolio purposes while following the original project structure and concepts.
-
-Original project:
-
-**Data With Baraa — SQL Data Analytics Project**  
-https://github.com/DataWithBaraa/sql-data-analytics-project
-
-Special thanks to **Baraa Khatib Salkini** for providing the project, dataset, roadmap, and educational content.
 
 ---
 
