@@ -1,320 +1,81 @@
-# 📊 SQL Data Analytics Project
+# SQL Data Analytics
 
-## 📌 Project Overview
+A SQL Server portfolio project for exploring sales data and building customer and product reports. The goal is to practice translating business questions into SQL queries, from basic exploration to window-function analysis.
 
-This project is an end-to-end **SQL Data Analytics project** focused on exploring and analyzing sales data using **Microsoft SQL Server**.
+**Tools:** Microsoft SQL Server, T-SQL, SQL Server Management Studio, Git.
 
-The project covers both **Exploratory Data Analysis (EDA)** and **Advanced Data Analytics**, transforming raw sales data into meaningful business insights about **customers, products, sales performance, and trends**.
+## Questions explored
 
-The main goal of this project was to strengthen my practical SQL skills by working with a real-world-style dataset and applying different analytical techniques to answer business questions.
+- How do sales change by month and year?
+- Which customers and products contribute most to sales?
+- How do current results compare with previous periods and averages?
+- How can customers and products be grouped using the available business metrics?
 
----
+## Files and analysis order
 
-## 🎯 Project Objectives
-
-The analysis focuses on:
-
-- Exploring the database structure and understanding the available data.
-- Analyzing key business metrics such as sales, orders, customers, and products.
-- Identifying sales trends and changes over time.
-- Evaluating product and customer performance.
-- Performing cumulative and running-total analysis.
-- Comparing performance across different periods.
-- Analyzing part-to-whole relationships.
-- Segmenting customers and products based on business metrics.
-- Building comprehensive **Customer** and **Product** reports.
-
----
-
-## 🛠️ Tools & Technologies
-
-- **Microsoft SQL Server**
-- **SQL Server Management Studio (SSMS)**
-- **SQL**
-- **Git & GitHub**
-
----
-
-## 📂 Project Structure
+The data used by the initializer is in `datasets/csv-files/`, including `gold.dim_customers.csv`, `gold.dim_products.csv`, and `gold.fact_sales.csv`. Other Bronze, Silver, and report CSV files are also supplied. No database backup file is included.
 
 ```text
-sql-data-analytics-project/
-│
-├── datasets/
-│   └── DataWarehouseAnalytics.bak
-│
-├── docs/
-│   └── Project Roadmap
-│
-├── scripts/
-│   ├── 01_database_exploration.sql
-│   ├── 02_dimensions_exploration.sql
-│   ├── 03_date_range_exploration.sql
-│   ├── 04_measures_exploration.sql
-│   ├── 05_magnitude_analysis.sql
-│   ├── 06_ranking_analysis.sql
-│   ├── 07_change_over_time_analysis.sql
-│   ├── 08_cumulative_analysis.sql
-│   ├── 09_performance_analysis.sql
-│   ├── 10_data_segmentation.sql
-│   ├── 11_part_to_whole_analysis.sql
-│   ├── 12_report_customers.sql
-│   └── 13_report_products.sql
-│
-└── README.md
+scripts/
+  00_init_database.sql
+  01_database_exploration.sql
+  02_dimensions_exploration.sql
+  03_date_range_exploration.sql
+  04_measures_exploration.sql
+  05_magnitude_analysis.sql
+  06_ranking_analysis.sql
+  07_change_over_time_analysis.sql
+  08_cumulative_analysis.sql
+  09_performance_analysis.sql
+  10_part_to_whole_analysis.sql
+  11_data_segmentation.sql
+  12_report_customers.sql
+  13_report_products.sql
 ```
 
----
+Scripts 01 to 06 explore the schema, dimensions, date ranges, metrics, and rankings. Scripts 07 to 11 cover trends, cumulative measures, comparisons, category contributions, and segmentation. Scripts 12 and 13 create the customer and product report views.
 
-# 🔍 Part 1: Exploratory Data Analysis (EDA)
+## Before running
 
-The first part of the project focuses on understanding the database and discovering the main characteristics of the data.
+> **Destructive setup:** `scripts/00_init_database.sql` drops and recreates `DataWarehouseAnalytics` if it exists. All existing contents will be deleted. Run only in a disposable development database after reviewing the script and backing up anything important.
 
-## 1. Database Exploration
+SQL Server permissions are needed for database creation and `BULK INSERT`. The SQL Server service must have access to the CSV folder, including when the database server is remote.
 
-Exploring the database structure, tables, columns, and relationships to understand how the data is organized.
+## Setup
 
-## 2. Dimensions Exploration
+```bash
+git clone https://github.com/Ahmedbadour14/sql-data-analytics-project.git
+cd sql-data-analytics-project
+```
 
-Analyzing categorical dimensions such as:
+1. Open `scripts/00_init_database.sql`. Change each hardcoded path containing `01_datasets/csv-files` to your actual server-readable `datasets/csv-files` location. Match each CSV filename exactly.
+2. Review the destructive setup warning, then run the initializer in your development instance.
+3. Select `DataWarehouseAnalytics` as the database context. Run analysis scripts 01 to 11 in order and inspect the outputs.
+4. Run scripts 12 and 13 to create `gold.report_customers` and `gold.report_products`.
+5. Explore the generated views:
 
-- Customers
-- Products
-- Countries
-- Categories
-- Subcategories
+```sql
+USE DataWarehouseAnalytics;
+GO
+SELECT TOP (20) * FROM gold.report_customers;
+SELECT TOP (20) * FROM gold.report_products;
+```
 
-This helps understand the different groups available for analysis.
+These preview queries have no specified ordering. Add an explicit `ORDER BY` when answering a ranked business question.
 
-## 3. Date Range Exploration
+## Reports
 
-Analyzing the available date ranges to understand:
+- **Customer report:** order and sales totals, quantity, product count, lifespan, recency, spending metrics, and customer segments.
+- **Product report:** sales and order totals, quantity, customer count, lifespan, recency, revenue metrics, and product performance segments.
 
-- First and last order dates
-- Historical coverage of the dataset
-- Customer age ranges
+The SQL demonstrates aggregations, CASE expressions, date functions, CTEs, joins, and window functions. Some recency calculations use the current date, so outputs can change when the same scripts are run later.
 
-## 4. Measures Exploration
+## Limits and next documentation steps
 
-Calculating important business metrics such as:
+This is a learning and portfolio project, not evidence of production deployment or measured business impact. Reproducible query-output examples and their interpretation still need to be added. Dataset/course attribution and my own changes should be documented before presenting the project as fully documented.
 
-- Total Sales
-- Total Quantity Sold
-- Average Selling Price
-- Total Orders
-- Total Products
-- Total Customers
+## License and author
 
-## 5. Magnitude Analysis
+See [MIT License](LICENSE) for the code license; dataset rights must be checked separately.
 
-Comparing measures across different dimensions to understand where business activity is concentrated.
-
-Examples include:
-
-- Customers by country
-- Customers by gender
-- Products by category
-- Revenue by category
-- Revenue by customer
-- Distribution of sold items across countries
-
-## 6. Ranking Analysis
-
-Identifying top and bottom performers using SQL ranking techniques.
-
-Examples:
-
-- Top-performing products
-- Lowest-performing products
-- Top customers by revenue
-- Customers with the highest number of orders
-
----
-
-# 📈 Part 2: Advanced Data Analytics
-
-The second part goes beyond basic exploration and focuses on deeper analytical techniques.
-
-## 7. Change Over Time Analysis
-
-Analyzing how business performance changes over time.
-
-This includes:
-
-- Sales trends by year
-- Sales trends by month
-- Customer growth
-- Quantity trends
-- Time-based aggregation
-
-These analyses help identify growth patterns, seasonality, and changes in business performance.
-
----
-
-## 8. Cumulative Analysis
-
-Using SQL window functions to calculate cumulative metrics such as:
-
-- Running Total Sales
-- Moving Average Price
-
-This helps track business performance progressively over time.
-
----
-
-## 9. Performance Analysis
-
-Comparing current performance with historical benchmarks.
-
-Techniques include:
-
-- Year-over-Year analysis
-- Previous-period comparisons
-- Average performance comparison
-- Product performance evaluation
-
-This helps determine whether products are performing **above or below previous periods and historical averages**.
-
----
-
-## 10. Data Segmentation
-
-Grouping data into meaningful business segments.
-
-### Product Segmentation
-
-Products are grouped into cost ranges to analyze how products are distributed across different price segments.
-
-### Customer Segmentation
-
-Customers are classified based on their **spending behavior and relationship with the business**.
-
-Example segments include:
-
-- VIP Customers
-- Regular Customers
-- New Customers
-
-This makes it easier to understand different customer groups and their contribution to the business.
-
----
-
-## 11. Part-to-Whole Analysis
-
-Analyzing how individual categories contribute to overall business performance.
-
-For example:
-
-- Revenue contribution by product category
-- Percentage of total sales generated by each category
-
-This helps identify which categories have the greatest impact on overall revenue.
-
----
-
-# 📊 Business Reports
-
-The final stage of the project combines multiple analytical techniques into two comprehensive SQL reports.
-
-## 👥 Customer Report
-
-The Customer Report provides a consolidated view of customer behavior and performance.
-
-It includes metrics such as:
-
-- Total Orders
-- Total Sales
-- Total Quantity Purchased
-- Total Products Purchased
-- Customer Lifespan
-- Recency
-- Average Order Value
-- Average Monthly Spend
-
-Customers are also segmented based on their purchasing behavior.
-
----
-
-## 📦 Product Report
-
-The Product Report provides a consolidated view of product performance.
-
-It includes:
-
-- Total Orders
-- Total Sales
-- Total Quantity Sold
-- Total Customers
-- Product Lifespan
-- Recency
-- Average Order Revenue
-- Average Monthly Revenue
-
-Products are also segmented based on their revenue performance.
-
----
-
-# 🧠 SQL Skills Applied
-
-Throughout this project, I practiced and applied:
-
-- `SELECT`
-- `WHERE`
-- `GROUP BY`
-- `ORDER BY`
-- Aggregate Functions
-- `CASE WHEN`
-- Date Functions
-- CTEs
-- Subqueries
-- Window Functions
-- `RANK()`
-- `ROW_NUMBER()`
-- `LAG()`
-- `SUM() OVER()`
-- Running Totals
-- Moving Averages
-- Data Segmentation
-- Time-Series Analysis
-- Part-to-Whole Analysis
-- KPI Calculation
-- Business Reporting
-
----
-
-# 💡 Key Takeaways
-
-This project helped me improve my ability to move beyond simply writing SQL queries and start using SQL as a **data analysis tool**.
-
-I gained practical experience in:
-
-- Understanding and exploring unfamiliar datasets.
-- Translating business questions into SQL queries.
-- Selecting the right metrics for different analytical problems.
-- Using window functions for advanced analysis.
-- Analyzing trends and performance over time.
-- Segmenting customers and products.
-- Building reusable SQL reports for business analysis.
-
-
----
-
-## 👤 About Me
-
-I'm **Ahmed Badour**, a Computer Science student interested in **Data Analysis, Business Intelligence, and Data Engineering**.
-
-I enjoy transforming raw data into meaningful insights and building practical data projects using technologies such as:
-
-- SQL
-- Excel
-- Power BI
-- Python
-
-### 🔗 Connect With Me
-
-**GitHub:**  
-https://github.com/Ahmedbadour14
-
----
-
-⭐ If you found this project useful, feel free to explore the repository and check out my other data projects.
+[Ahmed Badour](https://github.com/Ahmedbadour14)
